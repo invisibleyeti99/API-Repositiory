@@ -12,7 +12,7 @@ function App() {
 <Layout>
 <div className='bg-slate-50 min-h-screen'>
        <Routes>
-       <Route path='/' Component={Homepage} exact/>
+       <Route path='/API-Repositiory/' Component={Homepage} exact/>
        <Route path='/Meditation' Component={Meditation} />
        <Route path='/Chakras' Component={Chakras} />
        <Route path='/Yoga' Component={Yoga} />

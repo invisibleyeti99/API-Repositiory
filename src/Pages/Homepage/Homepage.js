@@ -1,12 +1,13 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState} from 'react'
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {MainContainer,ChatContainer, MessageList, Message,
     MessageInput, TypingIndicator } from "@chatscope/chat-ui-kit-react";
+import GIT_API_KEY from "./api.js"; 
 
-      const API_KEY = process.env.REACT_APP_CHATBOT_KEY;
+      const API_KEY = GIT_API_KEY;
       // "Explain things like you would to a 10 year old learning how to code."
       const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-        "role": "system", "content": "Explain things like you're talking to a software professional with 2 years of experience."
+        "role": "system", "content": "Talk like a pirate when answering questions"
       }
       
       function Chatbot() {
@@ -33,57 +34,59 @@ import {MainContainer,ChatContainer, MessageList, Message,
           // Initial system message to determine ChatGPT functionality
           // How it responds, how it talks, etc.
           setIsTyping(true);
+          
           await processMessageToChatGPT(newMessages);
         };
       
-        async function processMessageToChatGPT(chatMessages) { // messages is an array of messages
-          // Format messages for chatGPT API
-          // API is expecting objects in format of { role: "user" or "assistant", "content": "message here"}
-          // So we need to reformat
-      
+        async function processMessageToChatGPT(chatMessages, retryCount = 0) {
           let apiMessages = chatMessages.map((messageObject) => {
-            let role = "";
-            if (messageObject.sender === "ChatGPT") {
-              role = "assistant";
-            } else {
-              role = "user";
-            }
-            return { role: role, content: messageObject.message}
+            let role = messageObject.sender === "ChatGPT" ? "assistant" : "user";
+            return { role: role, content: messageObject.message };
           });
-      
-      
-          // Get the request body set up with the model we plan to use
-          // and the messages which we formatted above. We add a system message in the front to'
-          // determine how we want chatGPT to act. 
+        
           const apiRequestBody = {
             "model": "gpt-3.5-turbo",
-            "messages": [
-              systemMessage,  // The system message DEFINES the logic of our chatGPT
-              ...apiMessages // The messages from our chat with ChatGPT
-            ]
+            "messages": [systemMessage, ...apiMessages]
           }
-      
-          await fetch("https://api.openai.com/v1/chat/completions", 
-          {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer " + API_KEY,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(apiRequestBody)
-          }).then((data) => {
-            return data.json();
-          }).then((data) => {
-            console.log(data);
-            console.log("fail");
+        
+          try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + API_KEY
+              },
+              body: JSON.stringify(apiRequestBody)
+            });
+        
+            if (response.status === 429) {
+              const MAX_RETRIES = 5; // Max number of retries
+              const RETRY_DELAY = 5000; // Delay in milliseconds (5 seconds)
+              if (retryCount < MAX_RETRIES) {
+                alert(`Rate limit exceeded. Retrying in ${RETRY_DELAY / 1000} seconds...`);
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (2 ** retryCount))); // Exponential backoff
+                return processMessageToChatGPT(chatMessages, retryCount + 1);
+              } else {
+                throw new Error('Max retries reached');
+              }
+            }
+        
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
+            const data = await response.json();
             setMessages([...chatMessages, {
               message: data.choices[0].message.content,
               sender: "ChatGPT"
             }]);
             setIsTyping(false);
-          });
+          } catch (error) {
+            console.error("There was a problem with the fetch operation: ", error);
+            // Optionally, update the UI to reflect the error
+          }
         }
-      
+        
         return (
           <div className=" ml-80">
             <div style={{ position:"relative", height: "800px", width: "500px",paddingTop:"120px", marginLeft:"350px" , paddingBottom:"10px" }}>
