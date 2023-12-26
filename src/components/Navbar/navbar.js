@@ -12,7 +12,7 @@ const navbar = () => {
         <div className=" m-7 flex justify-center flex-wrap item-center">
           <ul className='flex font-semibold text-2xl space-x-7 '>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/API-Repositiory/">Home</Link>
             </li>
           </ul>
         </div>
