@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/API-Repositiory/static/css/main.de253be2.css",
-    "main.js": "/API-Repositiory/static/js/main.ce64d004.js",
+    "main.js": "/API-Repositiory/static/js/main.ee1e2edb.js",
     "static/media/message.mp3": "/API-Repositiory/static/media/message.dea2241a3790bb7dcd01.mp3",
     "index.html": "/API-Repositiory/index.html",
     "main.de253be2.css.map": "/API-Repositiory/static/css/main.de253be2.css.map",
-    "main.ce64d004.js.map": "/API-Repositiory/static/js/main.ce64d004.js.map"
+    "main.ee1e2edb.js.map": "/API-Repositiory/static/js/main.ee1e2edb.js.map"
   },
   "entrypoints": [
     "static/css/main.de253be2.css",
-    "static/js/main.ce64d004.js"
+    "static/js/main.ee1e2edb.js"
   ]
 }
