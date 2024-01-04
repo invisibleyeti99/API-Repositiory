@@ -13,6 +13,7 @@ const navbar = () => {
           <ul className='flex font-semibold text-2xl space-x-7 '>
             <li>
               <Link to="/API-Repositiory/Home">Home</Link>
+              
             </li>
           </ul>
         </div>

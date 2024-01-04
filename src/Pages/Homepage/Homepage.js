@@ -3,12 +3,22 @@ import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {MainContainer,ChatContainer, MessageList, Message,
     MessageInput, TypingIndicator } from "@chatscope/chat-ui-kit-react";
 import GIT_API_KEY from "./api.js"; 
+import Layout from "../../Layout/layout.js"
 
+      const instructions = /*"Talk like you are a professor who is reviewing what the student gives you.*/"Talk like you are southern white trash";
       const API_KEY = GIT_API_KEY;
       // "Explain things like you would to a 10 year old learning how to code."
       const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-        "role": "system", "content": "Talk like you are a professor who is reviewing what the student gives you."
+        "role": "system", "content": instructions
       }
+      /*const assistant = openai.beta.assistants.create({
+        name: "Data visualizer",
+        description: "You are great at creating beautiful data visualizations. You analyze data present in .csv files, understand trends, and come up with data visualizations relevant to those trends. You also share a brief text summary of the trends observed.",
+        //model: "gpt-4-1106-preview",
+        model: "gpt-3.5-turbo",
+        tools: [{"type": "code_interpreter"}],
+      });*/
+
       
       function Chatbot() {
         const [messages, setMessages] = useState([
@@ -63,7 +73,7 @@ import GIT_API_KEY from "./api.js";
               const MAX_RETRIES = 5; // Max number of retries
               const RETRY_DELAY = 5000; // Delay in milliseconds (5 seconds)
               if (retryCount < MAX_RETRIES) {
-                alert(`Rate limit exceeded. Retrying in ${RETRY_DELAY / 1000} seconds...`);
+                alert(`Message failed. Retrying in ${RETRY_DELAY / 1000} seconds...`);
                 await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (2 ** retryCount))); // Exponential backoff
                 return processMessageToChatGPT(chatMessages, retryCount + 1);
               } else {
@@ -88,6 +98,7 @@ import GIT_API_KEY from "./api.js";
         }
         
         return (
+          <Layout>
           <div className=" ml-80">
             <div style={{ position:"relative", height: "800px", width: "500px",paddingTop:"120px", marginLeft:"350px" , paddingBottom:"10px" }}>
               <MainContainer>
@@ -106,6 +117,7 @@ import GIT_API_KEY from "./api.js";
               </MainContainer>
             </div>
           </div>
+          </Layout>
         );
       };
       
