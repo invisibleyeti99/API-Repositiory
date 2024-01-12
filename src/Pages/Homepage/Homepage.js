@@ -5,7 +5,7 @@ import {MainContainer,ChatContainer, MessageList, Message,
 import GIT_API_KEY from "./api.js"; 
 import Layout from "../../Layout/layout.js"
 
-      const instructions = /*"Talk like you are a professor who is reviewing what the student gives you.*/"Talk like you are southern white trash";
+      const instructions = "Talk like you are a professor who is reviewing what the student gives you.";
       const API_KEY = GIT_API_KEY;
       // "Explain things like you would to a 10 year old learning how to code."
       const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
