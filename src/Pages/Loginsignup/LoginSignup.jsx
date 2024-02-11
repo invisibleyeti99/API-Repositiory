@@ -11,7 +11,7 @@ const LoginSignup = ({ onLoginSuccess }) => {
 
     // Replace these with your actual credentials
     const hardcodedUsername = 'user123';
-    const hardcodedPassword = 'Thispasswordshouldhold';
+    const hardcodedPassword = 'rsd';
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
       onLoginSuccess();
